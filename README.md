@@ -9,5 +9,5 @@
 
 
 
-股票資料來源:  https://goodinfo.tw/tw/index.asp
+股票資料來源:  https://goodinfo.tw/tw/index.asp </br>
 股票代碼: https://isin.twse.com.tw/isin/single_i.jsp
