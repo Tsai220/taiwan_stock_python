@@ -33,8 +33,10 @@ class StockSys:
 
     def search(self):
 
-
-        if self.mode == '2_1':
+        if self.mode == '1_1':
+            url = "https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y"
+            self.allStock(url)
+        elif self.mode == '2_1':
             url = "https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=2&issuetype=4&industry_code=&Page=1&chklike=Y"
             self.allStock(url)
         elif self.mode == '4':
@@ -42,7 +44,7 @@ class StockSys:
                 try:
                     url = "https://isin.twse.com.tw/isin/class_main.jsp?owncode=" + stock + "&stockname=&isincode=&market=" + self.market + "&issuetype=" + self.issueType + "&industry_code=" + self.industry_code + "&Page=1&chklike=Y"
                     request = req.Request(url, headers={
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36'
+                         'User-Agent': UserAgent().random
                     })
                     with req.urlopen(request) as response:
                         data = response.read().decode('MS950')
@@ -90,7 +92,7 @@ class StockSys:
         try:
             url = "https://goodinfo.tw/tw/StockFinDetail.asp?RPT_CAT=XX_M_QUAR_ACC&STOCK_ID=" + str(stockNumber)
             request = req.Request(url, headers={
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36'
+                'User-Agent': UserAgent().random
             })
             with req.urlopen(request) as response:
                 data = response.read().decode('utf-8')
@@ -109,15 +111,25 @@ class StockSys:
         except ValueError:
             print(stockName+" ("+stockNumber+") " + "錯誤可能情況: 1.未知股票代號 2.被GoodInfo暫時封鎖")
 
+if choose == '1':
+    print("選擇查詢類別\n1.所有分析\n2.依產業類別")
+    enterType = str(input("輸入查詢類別"))
+    if enterType == '1':
+        startAsy = StockSys(stockNumber='', market='2', issueType='4', industry_code='', mode='1_1')
+        startAsy.search()
+    elif enterType == '2':
 
-if choose == '2':
+        industryType = str(input("輸入產業別"))
+        startAsy = StockSys(stockNumber='', market='2', issueType='4', industry_code=industryType, mode='1_2')
+        startAsy.search()
+elif choose == '2':
     print("選擇查詢類別\n1.所有分析\n2.依產業類別")
     enterType = str(input("輸入查詢類別"))
     if enterType == '1':
         startAsy = StockSys(stockNumber='', market='2', issueType='4', industry_code='', mode='2_1')
         startAsy.search()
     elif enterType == '2':
-        print(stockTypeTxt)
+
         industryType = str(input("輸入產業別"))
         startAsy = StockSys(stockNumber='', market='2', issueType='4', industry_code=industryType, mode='2_2')
         startAsy.search()
