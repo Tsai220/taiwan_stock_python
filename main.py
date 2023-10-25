@@ -37,30 +37,28 @@ class StockSys:
         if self.mode == '2_1':
             url = "https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=2&issuetype=4&industry_code=&Page=1&chklike=Y"
             self.allStock(url)
+        elif self.mode == '4':
+            for index, stock in enumerate(self.stockNumber):
+                try:
+                    url = "https://isin.twse.com.tw/isin/class_main.jsp?owncode=" + stock + "&stockname=&isincode=&market=" + self.market + "&issuetype=" + self.issueType + "&industry_code=" + self.industry_code + "&Page=1&chklike=Y"
+                    request = req.Request(url, headers={
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36'
+                    })
+                    with req.urlopen(request) as response:
+                        data = response.read().decode('MS950')
 
+                    root = bs4.BeautifulSoup(data, "lxml")
+                    StockInfo = StringIO(str(root.select_one('.h4')))
 
-        # for index, stock in enumerate(self.stockNumber):
-        #     try:
-        #         url = "https://isin.twse.com.tw/isin/class_main.jsp?owncode=" + stock + "&stockname=&isincode=&market=" + self.market + "&issuetype=" + self.issueType + "&industry_code=" + self.industry_code + "&Page=1&chklike=Y"
-        #         request = req.Request(url, headers={
-        #             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36'
-        #         })
-        #         with req.urlopen(request) as response:
-        #             data = response.read().decode('MS950')
-        #
-        #         root = bs4.BeautifulSoup(data, "lxml")
-        #         StockInfo = StringIO(str(root.select_one('.h4')))
-        #
-        #         if StockInfo is not None:
-        #             dfs = pandas.read_html(StockInfo)[0]
-        #             print(dfs)
-        #             self.analyze(stockNumber=dfs.loc[1, 2], stockName=dfs.loc[1, 3])
-        #             time.sleep(1)
-        #
-        #     except ValueError:
-        #         print(stock + " 未知股票代號")
-        #
-        #         continue
+                    if StockInfo is not None:
+                        dfs = pandas.read_html(StockInfo)[0]
+                        self.analyze(stockNumber=dfs.loc[1, 2], stockName=dfs.loc[1, 3])
+                        time.sleep(1)
+
+                except ValueError:
+                    print(stock + " 未知股票代號")
+
+                    continue
 
     def allStock(self, url):
         try:
