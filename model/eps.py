@@ -22,7 +22,8 @@ def eps(Alleps):
                 growth.append(float(calc_format))
         else:
             print("Has Error")
-    growth.pop(0)
+
+    growth.pop(0) # 成長率計算到最後的值後多一個沒新值做計算，因此要刪除
     calcAvg = float(np.nansum(growth) / (len(growth)))
     growthAvg =[ float("{:.4f}".format(calcAvg))]
 
