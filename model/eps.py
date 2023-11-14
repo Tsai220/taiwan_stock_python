@@ -10,11 +10,12 @@ def eps(Alleps):
     # 成長幅度% = ((新值 - 舊值) / 舊值) * 100
     for index, val in enumerate(obj):
         objArr.append(float(val))#[舊到新]
-
+        print(index)
         if index == 0:
             growth.append(0.0)
         elif index > 0:
             if objArr[index - 1]==0:
+
                 growth.append(float(0))
             else:
                 calc = (((objArr[index]) - (objArr[index - 1])) /(objArr[index - 1])) * 1
@@ -22,6 +23,7 @@ def eps(Alleps):
                 growth.append(float(calc_format))
         else:
             print("Has Error")
+
 
     growth.pop(0) # 成長率計算到最後的值後多一個沒新值做計算，因此要刪除
     calcAvg = float(np.nansum(growth) / (len(growth)))

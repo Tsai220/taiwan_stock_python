@@ -100,8 +100,8 @@ class StockSys:
             catchTable = StringIO(str(root.select_one('#tblFinDetail')))  # 先將html轉str在轉StringIO來變成可處理文本
             if catchTable is not None:
                 dfs = pandas.read_html(catchTable)[0]
-
-                epsRateOUT = epsRate.eps(dfs.loc[6, '2023Q2':'2021Q1'][::-1])
+                print(dfs)
+                epsRateOUT = epsRate.eps(dfs.loc[6, dfs.columns[1]:dfs.columns[-1]][::-1])
                 chart.chartAxis(epsRateOUT[0], epsRateOUT[1], stockNumber, stockName)
                 print(stockNumber, epsRateOUT)
                 time.sleep(5)
